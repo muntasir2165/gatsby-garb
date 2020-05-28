@@ -1,30 +1,14 @@
 import React from "react"
-import { useStaticQuery, graphql, Link } from "gatsby"
+import { graphql, Link } from "gatsby"
 
 import Layout from "../components/layout"
 
-export default () => {
-  // const getMarkdownPosts = useStaticQuery(graphql`
-  const data = useStaticQuery(graphql`
-    {
-      allMarkdownRemark {
-        totalCount
-        edges {
-          node {
-            fields {
-              slug
-            }
-            id
-            frontmatter {
-              title
-              date
-            }
-            excerpt
-          }
-        }
-      }
-    }
-  `)
+export default ({ data, pageContext }) => {
+  const { currentPage, isFirstPage, isLastPage } = pageContext
+  const nextPage = `/blog/${String(currentPage + 1)}`
+  const prevPage =
+    currentPage - 1 === 1 ? "/blog" : `/blog/${String(currentPage - 1)}`
+
   return (
     <Layout>
       <div>
@@ -45,7 +29,42 @@ export default () => {
             </div>
           ))}
         </>
+
+        {/* Pagination Links */}
+        <div>
+          {!isFirstPage && (
+            <Link to={prevPage} rel="prev">
+              Prev Page
+            </Link>
+          )}
+          {!isLastPage && (
+            <Link to={nextPage} rel="next">
+              Next Page
+            </Link>
+          )}
+        </div>
       </div>
     </Layout>
   )
 }
+
+export const query = graphql`
+  query($skip: Int!, $limit: Int!) {
+    allMarkdownRemark(skip: $skip, limit: $limit) {
+      totalCount
+      edges {
+        node {
+          fields {
+            slug
+          }
+          id
+          frontmatter {
+            title
+            date
+          }
+          excerpt
+        }
+      }
+    }
+  }
+`
