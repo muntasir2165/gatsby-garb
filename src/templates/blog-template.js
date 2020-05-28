@@ -1,5 +1,5 @@
 import React from "react"
-import { useStaticQuery, graphql } from "gatsby"
+import { useStaticQuery, graphql, Link } from "gatsby"
 
 import Layout from "../components/layout"
 
@@ -11,6 +11,9 @@ export default () => {
         totalCount
         edges {
           node {
+            fields {
+              slug
+            }
             id
             frontmatter {
               title
@@ -33,7 +36,9 @@ export default () => {
           {data.allMarkdownRemark.edges.map(({ node }) => (
             <div key={node.id}>
               <h3>
-                {node.frontmatter.title}{" "}
+                <Link to={`/posts${node.fields.slug}`}>
+                  {node.frontmatter.title}
+                </Link>{" "}
                 <span style={{ color: "#bbb" }}>- {node.frontmatter.date}</span>
               </h3>
               <p>{node.excerpt}</p>
