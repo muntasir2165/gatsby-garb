@@ -62,26 +62,26 @@ export default ({ data, pageContext }) => {
 }
 
 export const query = graphql`
-  query($skip: Int!, $limit: Int!) {
-    allMarkdownRemark(
-      skip: $skip
-      limit: $limit
-      sort: { fields: [frontmatter___date], order: DESC }
-    ) {
-      totalCount
-      edges {
-        node {
-          fields {
-            slug
-          }
-          id
-          frontmatter {
-            title
-            date
-          }
-          excerpt
-        }
-      }
-    }
-  }
-`
+         query($skip: Int!, $limit: Int!) {
+           allMarkdownRemark(
+             skip: $skip
+             limit: $limit
+             sort: { fields: [frontmatter___date], order: DESC }
+           ) {
+             totalCount
+             edges {
+               node {
+                 fields {
+                   slug
+                 }
+                 id
+                 frontmatter {
+                   title
+                   date(formatString: "MMMM Do, YYYY")
+                 }
+                 excerpt
+               }
+             }
+           }
+         }
+       `
